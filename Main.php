@@ -7,10 +7,11 @@ $comunidad= [ new Vecino ("Paloma Cuesta", "2B", ["Hombre ya!", "que mal!"], "Co
             new Vecino ( "Emilio", "porteria",["no me pises lo fregao!","hombre ya"] , "concha")];
 
 
-print_r(buscarPiso($comunidad, "2B"));
-print_r(devolverFraseRecurrente($comunidad, "Emilio"));
+print_r(buscarVecinoPorPiso($comunidad, "2B"));
+$arrayVecinoEncontrado =identificarVecinoBuscado($comunidad,"Emilio");
+print_r(devolverFraseRecurrente($arrayVecinoEncontrado));
 
-function buscarPiso ($comunidad, $piso){
+function buscarVecinoPorPiso ($comunidad, $piso){
     foreach ($comunidad as $vecino){
         if (strcasecmp($vecino->getPiso(), $piso)==0){
             $vecinos[]= $vecino->getNombre();
@@ -19,22 +20,19 @@ function buscarPiso ($comunidad, $piso){
     return $vecinos;
 }
 
-function devolverFraseRecurrente($comunidad, $nombre){
-    foreach ($comunidad as $vecino){
-        if (strcasecmp($vecino->getNombre(), $nombre)==0){
-            $fraseRecurrente[]=$vecino->getFrase();
-        }
+
+ function identificarVecinoBuscado($comunidad, $nombre){
+    $vecinoBuscado= array_filter($comunidad, function($vecino) use ($nombre){
+        return ($vecino->getNombre() === $nombre);
+    });
+    return $vecinoBuscado;
+ }
+
+ 
+function devolverFraseRecurrente($arrayVecinoEncontrado){
+    foreach($arrayVecinoEncontrado as $vecino){
+         $frases[] = $vecino->getFrase()[array_rand($vecino->getFrase())];
     }
-    return $fraseRecurrente;
+    return $frases;
 }
-
-
-
-
-
-
-
-
-
-
 ?>
